@@ -1,1 +1,592 @@
- 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abby's Word Problem Review for Unit 6</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for rendering LaTeX math formulas -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['\\[', '\\]']]
+        },
+        startup: {
+          pageReady: () => {
+            return MathJax.startup.defaultPageReady().then(() => {
+              // Initial typesetting complete
+              window.mathJaxLoaded = true;
+            });
+          }
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom radio button styles for better UX */
+        .option-radio {
+            transition: all 0.2s ease-in-out;
+        }
+        .option-radio:hover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .option-selected {
+            border-color: #2563eb !important;
+            background-color: #eff6ff !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen p-4 md:p-8">
+
+    <div id="app" class="max-w-3xl mx-auto">
+        <!-- Application Content Will Be Injected Here -->
+    </div>
+
+    <script>
+        // Quiz Data extracted from the provided Unit 6 PDFs
+        const quizData = [
+            // Category: Exponent Rules
+            {
+                category: "Exponent Rules",
+                question: "A rectangular garden has a width of \\( 4xy^2 \\) meters and a length of \\( (2y)^3 \\) meters. What is the expression for the total area of the garden?",
+                options: [
+                    "\\( 8xy^5 \\) square meters",
+                    "\\( 32xy^5 \\) square meters",
+                    "\\( 32x^3y^6 \\) square meters",
+                    "\\( 8x^3y^5 \\) square meters"
+                ],
+                correct: 1,
+                explanation: "Area of a rectangle is length times width. First, simplify the length: \\( (2y)^3 = 8y^3 \\). Then multiply by the width: \\( (4xy^2)(8y^3) \\). Multiply coefficients (4 &times; 8 = 32) and add exponents for matching bases (\\(y^{2+3} = y^5\\)). The result is \\(32xy^5\\)."
+            },
+            {
+                category: "Exponent Rules",
+                question: "A manufacturing process requires cutting a sheet of material with an area represented by \\( (3a^2x^3)^2 \\). It is then multiplied by a factor of \\( (2ax^4)^3 \\) based on its thickness. What is the final volume expression?",
+                options: [
+                    "\\( 72a^7x^{18} \\)",
+                    "\\( 36a^6x^{12} \\)",
+                    "\\( 6a^7x^{18} \\)",
+                    "\\( 72a^6x^{10} \\)"
+                ],
+                correct: 0,
+                explanation: "First, apply the powers to the parentheses: \\( (3^2 a^4 x^6) = 9a^4x^6 \\) and \\( (2^3 a^3 x^{12}) = 8a^3x^{12} \\). Then multiply the two resulting terms: \\( (9a^4x^6)(8a^3x^{12}) \\). Multiply coefficients (9 &times; 8 = 72) and add exponents to get \\( 72a^7x^{18} \\)."
+            },
+            {
+                category: "Exponent Rules",
+                question: "The volume of a storage box is \\( 6y^2x^8 \\) and its base area is \\( 12x^3y^7 \\). The company decides to square the height to find a new specific safety dimension. What is this squared height?",
+                options: [
+                    "\\( \\frac{x^{10}}{4y^{10}} \\)",
+                    "\\( \\frac{x^5}{2y^5} \\)",
+                    "\\( \\frac{36x^{16}}{144y^{14}} \\)",
+                    "\\( 4x^{10}y^{10} \\)"
+                ],
+                correct: 0,
+                explanation: "First, find the height by dividing volume by base area: \\( \\frac{6y^2x^8}{12x^3y^7} \\). Simplify the fraction: \\( \\frac{1}{2} x^{8-3} y^{2-7} = \\frac{x^5}{2y^5} \\). Next, square the height: \\( (\\frac{x^5}{2y^5})^2 = \\frac{x^{10}}{4y^{10}} \\)."
+            },
+            
+            // Category: Radicals & Fractional Exponents
+            {
+                category: "Radicals & Fractional Exponents",
+                question: "A square plot of land has an area of \\( 16x^4 \\) square miles. What is the length of one side of the plot?",
+                options: [
+                    "\\( 4x^2 \\) miles",
+                    "\\( 8x^2 \\) miles",
+                    "\\( 4x \\) miles",
+                    "\\( 16x^2 \\) miles"
+                ],
+                correct: 0,
+                explanation: "To find the side length, take the square root of the area: \\( \\sqrt{16x^4} \\). Take the square root of the coefficient (\\(\\sqrt{16} = 4\\)) and divide the exponent by 2 (\\(x^{4/2} = x^2\\))."
+            },
+            {
+                category: "Radicals & Fractional Exponents",
+                question: "A cubic water tank has a volume of \\( 27x^3 \\) cubic meters. What is the length of one edge of the tank?",
+                options: [
+                    "\\( 9x \\) meters",
+                    "\\( 3x^2 \\) meters",
+                    "\\( 3x \\) meters",
+                    "\\( 27x \\) meters"
+                ],
+                correct: 2,
+                explanation: "To find the edge length of a cube, take the cube root of the volume: \\( \\sqrt[3]{27x^3} \\). The cube root of 27 is 3, and the cube root of \\( x^3 \\) is \\( x \\). The edge length is \\( 3x \\)."
+            },
+            {
+                category: "Radicals & Fractional Exponents",
+                question: "The power output of a rectangular solar panel is proportional to its area. If the length of the panel is \\( x^{\\frac{1}{2}} \\) and width is \\( x^{\\frac{3}{2}} \\), what is the final expression for the area?",
+                options: [
+                    "\\( x^{\\frac{3}{4}} \\)",
+                    "\\( x^3 \\)",
+                    "\\( x^2 \\)",
+                    "\\( x \\)"
+                ],
+                correct: 2,
+                explanation: "Area is length &times; width. When multiplying terms with the same base, add their fractional exponents: \\( \\frac{1}{2} + \\frac{3}{2} = \\frac{4}{2} = 2 \\). The area is \\( x^2 \\)."
+            },
+
+            // Category: Linear vs. Exponential
+            {
+                category: "Linear vs. Exponential",
+                question: "A student deposits money into a savings account, and the balance increases by exactly \\$50 each year. Does this situation represent linear or exponential growth, and why?",
+                options: [
+                    "Linear, because it increases by a constant amount each year.",
+                    "Linear, because the rate of change is less than 10%.",
+                    "Exponential, because money in an account always grows exponentially.",
+                    "Exponential, because it increases by a constant multiplier each year."
+                ],
+                correct: 0,
+                explanation: "Adding a constant amount (\\$50) over equal intervals of time creates a straight line graph. This constant rate of change is the definition of a linear relationship."
+            },
+            {
+                category: "Linear vs. Exponential",
+                question: "A brand new car loses 10% of its value each year after it is purchased. Is this situation linear or exponential?",
+                options: [
+                    "Linear, because the value decreases steadily.",
+                    "Linear, because it drops by exactly 10 every year.",
+                    "Exponential, because the value decreases by a constant percent multiplier each year.",
+                    "Exponential, because the value of cars always decays rapidly."
+                ],
+                correct: 2,
+                explanation: "Losing 10% means the new value is 90% of the previous year's value. Repeatedly multiplying by a constant factor (0.90) is the definition of exponential decay."
+            },
+            {
+                category: "Linear vs. Exponential",
+                question: "Account A grows by adding \\$30 per year. Account B grows by earning 4% interest per year. Which account is the better investment after many years, and why?",
+                options: [
+                    "Account A, because \\$30 is a larger number than 4%.",
+                    "Account B, because exponential growth will always eventually exceed linear growth.",
+                    "They will eventually equal out and grow at the same exact rate.",
+                    "Cannot be determined without knowing the starting deposit amount."
+                ],
+                correct: 1,
+                explanation: "Account A is linear (adding \\$30) and Account B is exponential (multiplying by 1.04). No matter the starting value, an exponential growth function will always eventually overtake a linear function as time goes on."
+            },
+            {
+                category: "Linear vs. Exponential",
+                question: "During a manufacturing process, a piece of material doubles in capacity at each step of production. Does this model a linear or exponential process?",
+                options: [
+                    "Linear, because the process happens in steady steps.",
+                    "Linear, because multiplying by 2 is a small, constant operation.",
+                    "Exponential, because the material is multiplied by a constant factor of 2 at each step.",
+                    "Exponential, because the material's size will eventually stop growing."
+                ],
+                correct: 2,
+                explanation: "Doubling means multiplying by 2 over and over again. Repeated multiplication is exponential growth."
+            },
+
+            // Category: Exponential Models
+            {
+                category: "Exponential Models",
+                question: "The equation \\( p(w) = 100(3)^w \\) models a butterfly population, where \\( w \\) is the number of weeks since the population was first measured. What does the value 100 represent in this situation?",
+                options: [
+                    "The growth rate of the butterflies",
+                    "The percent change of the population",
+                    "The number of weeks passed",
+                    "The initial butterfly population"
+                ],
+                correct: 3,
+                explanation: "In the standard exponential model \\( y = a(b)^x \\), 'a' represents the initial amount when time \\( w = 0 \\)."
+            },
+            {
+                category: "Exponential Models",
+                question: "The same butterfly population is modeled by \\( p(w) = 100(3)^w \\), where \\( w \\) is the number of weeks since the first measurement. What would \\( p(-3) \\) represent in this context?",
+                options: [
+                    "The population will die off in 3 weeks.",
+                    "The population 3 weeks before it was first measured.",
+                    "The population is decreasing by 3 butterflies per week.",
+                    "A negative number of butterflies, which makes no sense."
+                ],
+                correct: 1,
+                explanation: "Since \\( w \\) represents weeks since the start (\\(w=0\\)), a negative time value like \\( w = -3 \\) represents the time 3 weeks prior to the initial measurement."
+            },
+            {
+                category: "Exponential Models",
+                question: "Last year, the attendance at a water park was 825,000 people. This year, attendance increased by 7%. Which expression correctly represents the attendance at the water park this year?",
+                options: [
+                    "\\( 825,000 + 0.07 \\)",
+                    "\\( 825,000(1.07) \\)",
+                    "\\( 825,000(0.07) \\)",
+                    "\\( 825,000(1 - 0.07) \\)"
+                ],
+                correct: 1,
+                explanation: "To increase a value by 7%, you multiply the original amount by \\( 1 + 0.07 \\), which equals 1.07."
+            },
+            {
+                category: "Exponential Models",
+                question: "The population of sea urchins in a region is represented by the function \\( f(x) = 2500(0.6)^x \\), where \\( x \\) is years. By what percent is the population decreasing each year?",
+                options: [
+                    "60%",
+                    "40%",
+                    "0.6%",
+                    "4%"
+                ],
+                correct: 1,
+                explanation: "The growth/decay factor is 0.6. Because it is less than 1, it represents decay. The factor is calculated by \\( 1 - r \\). So, \\( 1 - 0.40 = 0.60 \\), which means the population is decreasing by 40%."
+            },
+            {
+                category: "Exponential Models",
+                question: "A section of an ocean's coral reef under restoration had a volume of 500 cubic meters at year 0, and 550 cubic meters after 1 year. Assuming exponential growth, which equation models the volume of the coral reef after \\( x \\) years?",
+                options: [
+                    "\\( c(x) = 500(1.5)^x \\)",
+                    "\\( c(x) = 550(0.5)^x \\)",
+                    "\\( c(x) = 500(1.1)^x \\)",
+                    "\\( c(x) = 500 + 50x \\)"
+                ],
+                correct: 2,
+                explanation: "The initial value is 500. After 1 year, the volume is 550. The multiplier is \\( 550 / 500 = 1.1 \\). Therefore, the exponential model is \\( 500(1.1)^x \\)."
+            },
+
+            // Category: Transformations
+            {
+                category: "Transformations",
+                question: "The parent function for a bacteria culture's growth is \\( f(x) = 2^x \\). A new culture is placed in a different environment and its growth is modeled by \\( g(x) = 2^{x+2} \\). Describe how the start time of the new culture relates to the original.",
+                options: [
+                    "Shifted up 2 units",
+                    "Shifted down 2 units",
+                    "Shifted right 2 units",
+                    "Shifted left 2 units (started 2 hours earlier)"
+                ],
+                correct: 3,
+                explanation: "Adding 2 directly to the \\( x \\) in the exponent (\\(x+2\\)) translates the graph horizontally in the opposite direction, moving it to the left by 2 units."
+            },
+            {
+                category: "Transformations",
+                question: "An animal population originally grows according to \\( f(x) = 2^x \\). Due to a constant influx of migrants, the new model is \\( g(x) = 2^x + 3 \\). Describe the graphical transformation.",
+                options: [
+                    "Shifted left 3 units",
+                    "Shifted right 3 units",
+                    "Shifted up 3 units",
+                    "Shifted down 3 units"
+                ],
+                correct: 2,
+                explanation: "Adding a constant (+3) to the outside of the exponential function shifts the entire graph vertically upwards by 3 units."
+            },
+            {
+                category: "Transformations",
+                question: "An original investment model is graphed as \\( f(x) = 3^x \\). A modified investment plan is represented by the function \\( g(x) = 3^{x+4} - 1 \\). Describe the transformations applied to the original graph.",
+                options: [
+                    "Left 4 units, Up 1 unit",
+                    "Left 4 units, Down 1 unit",
+                    "Right 4 units, Down 1 unit",
+                    "Right 4 units, Up 1 unit"
+                ],
+                correct: 1,
+                explanation: "The \\( x+4 \\) in the exponent shifts the graph horizontally to the left 4 units. The \\( - 1 \\) at the end of the function shifts the entire graph vertically down 1 unit."
+            },
+
+            // Category: Compound Interest
+            {
+                category: "Compound Interest",
+                question: "Kendra deposited \\$1,200 into a savings account with an annual interest rate of 3.5%. She makes no additional deposits or withdrawals. Which function represents the amount she will have after \\( t \\) years?",
+                options: [
+                    "\\( f(t) = 1200(1.35)^t \\)",
+                    "\\( f(t) = 1200(0.035)^t \\)",
+                    "\\( f(t) = 1200(1.035)^t \\)",
+                    "\\( f(t) = 1200 + 1.035t \\)"
+                ],
+                correct: 2,
+                explanation: "Using the compound interest formula with annual compounding, the rate is \\( r = 3.5\\% = 0.035 \\). The multiplier is \\( 1 + 0.035 = 1.035 \\). So the equation is \\( 1200(1.035)^t \\)."
+            },
+            {
+                category: "Compound Interest",
+                question: "Darius puts \\$400 in an account with a 1.1% weekly interest rate. The account earns interest 52 times per year. Which equation could represent Darius's account balance, \\( d(t) \\), after \\( t \\) years?",
+                options: [
+                    "\\( d(t) = 400(1.011)^{52t} \\)",
+                    "\\( d(t) = 400(1.11)^{52t} \\)",
+                    "\\( d(t) = 400(1.011)^t \\)",
+                    "\\( d(t) = 400(1 + 0.011)^{52} \\)"
+                ],
+                correct: 0,
+                explanation: "The rate is a *weekly* rate of 1.1%, so the multiplier is \\( 1 + 0.011 = 1.011 \\). Since it is applied 52 times per year, the total number of compoundings in \\( t \\) years is \\( 52 \\times t = 52t \\)."
+            }
+        ];
+
+        // State variables
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let currentView = 'start'; // 'start', 'quiz', 'results'
+
+        // Utility to trigger MathJax rendering
+        function renderMath() {
+            if (window.MathJax && window.mathJaxLoaded) {
+                MathJax.typesetPromise([document.getElementById('app')]).catch((err) => console.log(err.message));
+            } else {
+                // If MathJax isn't fully loaded yet, try again in 100ms
+                setTimeout(renderMath, 100);
+            }
+        }
+
+        // --- View Generators ---
+
+        function getStartHTML() {
+            return `
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center mt-6 md:mt-10 mx-2 md:mx-0">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Abby's Word Problem Review for Unit 6</h1>
+                    <h2 class="text-lg md:text-xl text-gray-600 mb-6">Exponents & Exponential Functions</h2>
+                    <p class="text-gray-500 mb-8 max-w-lg mx-auto text-sm md:text-base">
+                        This 20-question quiz will test your knowledge across multiple categories to help identify areas of strength and areas where you might need more practice.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2 mb-8">
+                        <span class="px-3 py-1 bg-gray-100 text-sm rounded-full text-gray-600">Exponent Rules</span>
+                        <span class="px-3 py-1 bg-gray-100 text-sm rounded-full text-gray-600">Radicals</span>
+                        <span class="px-3 py-1 bg-gray-100 text-sm rounded-full text-gray-600">Linear vs Exponential</span>
+                        <span class="px-3 py-1 bg-gray-100 text-sm rounded-full text-gray-600">Models</span>
+                        <span class="px-3 py-1 bg-gray-100 text-sm rounded-full text-gray-600">Transformations</span>
+                    </div>
+                    <button onclick="startQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-md transition duration-200">
+                        Start Quiz
+                    </button>
+                </div>
+            `;
+        }
+
+        function getQuizHTML() {
+            const q = quizData[currentQuestion];
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            const hasAnswered = userAnswers[currentQuestion] !== null;
+
+            let optionsHTML = '';
+            q.options.forEach((opt, index) => {
+                const isSelected = userAnswers[currentQuestion] === index;
+                optionsHTML += `
+                    <div onclick="selectOption(${index})" 
+                         class="option-radio cursor-pointer border-2 rounded-xl p-4 mb-3 ${isSelected ? 'option-selected' : 'border-gray-200 hover:border-gray-300'}">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${isSelected ? 'border-blue-600' : 'border-gray-300'}">
+                                ${isSelected ? '<div class="w-3 h-3 bg-blue-600 rounded-full"></div>' : ''}
+                            </div>
+                            <div class="text-lg text-gray-800">${opt}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            return `
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mt-6">
+                    <!-- Progress Bar -->
+                    <div class="mb-6">
+                        <div class="flex justify-between text-sm text-gray-500 mb-2 font-medium">
+                            <span>Question ${currentQuestion + 1} of ${quizData.length}</span>
+                            <span class="uppercase tracking-wider text-blue-600 font-bold text-xs bg-blue-50 px-2 py-1 rounded">${q.category}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question -->
+                    <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6 leading-relaxed">
+                        ${q.question}
+                    </h2>
+
+                    <!-- Options -->
+                    <div class="mb-8">
+                        ${optionsHTML}
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="flex justify-between items-center border-t border-gray-100 pt-6">
+                        <button onclick="prevQuestion()" class="${currentQuestion === 0 ? 'invisible' : ''} text-gray-500 hover:text-blue-600 font-medium py-2 px-4 transition">
+                            &larr; Previous
+                        </button>
+                        <button onclick="nextQuestion()" 
+                                class="${hasAnswered ? 'bg-blue-600 hover:bg-blue-700 shadow-md' : 'bg-gray-300 cursor-not-allowed'} text-white font-bold py-3 px-8 rounded-lg transition duration-200"
+                                ${!hasAnswered ? 'disabled' : ''}>
+                            ${currentQuestion === quizData.length - 1 ? 'Finish Quiz' : 'Next Question &rarr;'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getResultsHTML() {
+            // Calculate Total Score
+            let correctCount = 0;
+            userAnswers.forEach((ans, index) => {
+                if (ans === quizData[index].correct) correctCount++;
+            });
+            const scorePercentage = Math.round((correctCount / quizData.length) * 100);
+
+            // Calculate Category Breakdown
+            const categories = [...new Set(quizData.map(q => q.category))];
+            let categoryHTML = '';
+
+            categories.forEach(cat => {
+                const catQuestions = quizData.filter(q => q.category === cat);
+                const totalInCat = catQuestions.length;
+                let correctInCat = 0;
+                
+                quizData.forEach((q, index) => {
+                    if (q.category === cat && userAnswers[index] === q.correct) {
+                        correctInCat++;
+                    }
+                });
+
+                const catPercentage = Math.round((correctInCat / totalInCat) * 100);
+                
+                // Color coding based on performance
+                let colorClass = "bg-green-500";
+                let textClass = "text-green-700";
+                let bgClass = "bg-green-50";
+                if (catPercentage < 60) {
+                    colorClass = "bg-red-500";
+                    textClass = "text-red-700";
+                    bgClass = "bg-red-50";
+                } else if (catPercentage < 80) {
+                    colorClass = "bg-yellow-500";
+                    textClass = "text-yellow-700";
+                    bgClass = "bg-yellow-50";
+                }
+
+                categoryHTML += `
+                    <div class="${bgClass} rounded-lg p-4 mb-3 border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold ${textClass}">${cat}</h4>
+                            <span class="font-bold ${textClass}">${correctInCat} / ${totalInCat}</span>
+                        </div>
+                        <div class="w-full bg-white/50 rounded-full h-2.5">
+                            <div class="${colorClass} h-2.5 rounded-full" style="width: ${catPercentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Detailed Review HTML
+            let reviewHTML = '<h3 class="text-2xl font-bold text-gray-800 mb-6 mt-12 border-b pb-2">Detailed Review</h3>';
+            
+            quizData.forEach((q, index) => {
+                const userAns = userAnswers[index];
+                const isCorrect = userAns === q.correct;
+                
+                reviewHTML += `
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6 border-l-4 ${isCorrect ? 'border-green-500' : 'border-red-500'}">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-gray-500">${q.category}</span>
+                            <span class="px-2 py-1 text-xs font-bold rounded ${isCorrect ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                ${isCorrect ? 'Correct' : 'Incorrect'}
+                            </span>
+                        </div>
+                        <h4 class="text-lg font-medium text-gray-800 mb-4">${index + 1}. ${q.question}</h4>
+                        
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 mb-1">Your Answer:</p>
+                            <p class="font-medium ${isCorrect ? 'text-green-600' : 'text-red-600'} bg-gray-50 p-3 rounded">
+                                ${q.options[userAns]}
+                            </p>
+                        </div>
+                        
+                        ${!isCorrect ? `
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 mb-1">Correct Answer:</p>
+                                <p class="font-medium text-green-600 bg-green-50 p-3 rounded">
+                                    ${q.options[q.correct]}
+                                </p>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mt-4">
+                            <p class="text-sm font-bold text-blue-800 mb-1">Explanation:</p>
+                            <p class="text-sm text-blue-900">${q.explanation}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            return `
+                <div class="mt-6 mb-12">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 text-center mb-8 border-t-8 ${scorePercentage >= 70 ? 'border-green-500' : 'border-yellow-500'}">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Quiz Complete!</h2>
+                        <div class="text-5xl font-extrabold my-6 ${scorePercentage >= 70 ? 'text-green-500' : 'text-yellow-600'}">
+                            ${scorePercentage}%
+                        </div>
+                        <p class="text-lg text-gray-600">You scored <strong>${correctCount}</strong> out of <strong>${quizData.length}</strong>.</p>
+                        
+                        <button onclick="restartQuiz()" class="mt-6 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-2 px-6 rounded-lg transition duration-200">
+                            Retake Quiz
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Diagnostic Breakdown</h3>
+                        <p class="text-sm text-gray-500 mb-6">Review your performance by category to identify what concepts you need to practice.</p>
+                        ${categoryHTML}
+                    </div>
+
+                    ${reviewHTML}
+                </div>
+            `;
+        }
+
+        // --- Controller Logic ---
+
+        function updateUI() {
+            const app = document.getElementById('app');
+            if (currentView === 'start') {
+                app.innerHTML = getStartHTML();
+            } else if (currentView === 'quiz') {
+                app.innerHTML = getQuizHTML();
+            } else if (currentView === 'results') {
+                app.innerHTML = getResultsHTML();
+            }
+            renderMath();
+            window.scrollTo(0, 0);
+        }
+
+        window.startQuiz = () => {
+            currentView = 'quiz';
+            currentQuestion = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            updateUI();
+        };
+
+        window.selectOption = (index) => {
+            userAnswers[currentQuestion] = index;
+            updateUI();
+        };
+
+        window.nextQuestion = () => {
+            if (userAnswers[currentQuestion] === null) return;
+            
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                updateUI();
+            } else {
+                currentView = 'results';
+                updateUI();
+            }
+        };
+
+        window.prevQuestion = () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                updateUI();
+            }
+        };
+
+        window.restartQuiz = () => {
+            currentView = 'start';
+            updateUI();
+        };
+
+        // Initialize the app on load
+        document.addEventListener('DOMContentLoaded', updateUI);
+
+    </script>
+</body>
+</html>
